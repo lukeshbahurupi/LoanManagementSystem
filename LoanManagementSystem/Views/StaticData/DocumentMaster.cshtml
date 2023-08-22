@@ -1,0 +1,21 @@
+﻿ @model List<DocumentMaster>
+
+<h3>Document Master</h3>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Document Code</th>
+            <th>Document Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model)
+        {<tr>
+            <td>@obj.DocumentCode</td>
+            <td>@obj.DocumentName</td>
+        </tr>
+        }
+    </tbody>
+</table>

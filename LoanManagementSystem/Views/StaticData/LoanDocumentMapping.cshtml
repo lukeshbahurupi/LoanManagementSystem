@@ -1,0 +1,25 @@
+﻿@model List<LoanDocumentMapping>
+<h3>Document Mapping</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Loan Code</th>
+            <th>Document Code</th>
+            <th>Loan Description</th>
+            <th>Document Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.Id</td>
+                <td>@obj.LoanType.LoanCode</td>
+                <td>@obj.DocumentMaster.DocumentCode</td>
+                <td>@obj.LoanType.LoanDescription</td>
+                <td>@obj.DocumentMaster.DocumentName</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,114 @@
+﻿@model LoanApplication
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+ @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+<h1>Application form</h1>
+
+
+<div>
+    <form method="post">
+       <div>
+            <lable>Application Date</lable>
+            <input for="ApplicationDate" />
+        </div>
+       <div>
+            <lable>Customer Name</lable>
+            <input for="CustemerName" />
+        </div>
+       <div>
+            <lable>Gender</lable>
+            <select>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+       </div>
+       <div>
+            <lable>Birth Date</lable>
+            <input for="BirthDate" type="date" id="BirthDate" />
+        </div>
+       <div>
+            <lable>Age</lable>
+            <input for="CustemerName" id="Age"/>
+        </div>
+       <div>
+            <lable>Phone Number</lable>
+            <input for="PhoneNumber" />
+        </div>
+        <div>
+            <label>Loan Type</label>
+            <select id="LoanType" name="LoanType">
+                <option value="Veical Laon">Veical Laon</option>
+                <option value="Personal Loan">Personal Loan</option>
+                <option value="Gold Loan">Gold Loan</option>
+            </select>
+        </div>
+        <div>
+            <label>Loan Tenure In Month</label>
+            <select id="LoanTenure" name="LoanTenure">
+                <!-- Options will be dynamically added here -->
+            </select>
+        </div>
+       <div>
+            <lable>Required Loan Amount</lable>
+            <input for="RequiredLoanAmount" />
+        </div>
+       <div>
+            <lable>Rate Of Interest</lable>
+            <input for="RateOfInterest" />
+        </div>       
+       <div>
+            <lable>Loan EMI</lable>
+            <input for="" />
+        </div>
+       </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#BirthDate").change(function () {
+            calculateAge();
+        });
+    });
+
+    function calculateAge() {
+        const birthDate = new Date($("#BirthDate").val());
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+
+        if (
+            today.getMonth() < birthDate.getMonth() ||
+            (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())
+        ) {
+            $("#Age").val(age - 1);
+        } else {
+            $("#Age").val(age);
+        }
+    }
+    //for Tenure 
+    $("#LoanType").change(function () {
+        customizeLoanTenureOptions();
+    });
+
+    function customizeLoanTenureOptions() {
+        const selectedLoanType = $("#LoanType").val();
+        const loanTenureOptions = $("#LoanTenure");
+
+        loanTenureOptions.empty(); // Clear existing options
+
+        if (selectedLoanType === "Veical Laon") {
+            loanTenureOptions.append(new Option("6 months", "6"));
+            loanTenureOptions.append(new Option("12 months", "12"));
+            loanTenureOptions.append(new Option("24 months", "24"));
+        } else if (selectedLoanType === "Personal Loan") {
+            loanTenureOptions.append(new Option("12 months", "12"));
+            loanTenureOptions.append(new Option("24 months", "24"));
+            // Add more options for Personal Loan...
+        } else if (selectedLoanType === "Gold Loan") {
+            loanTenureOptions.append(new Option("18 months", "18"));
+            loanTenureOptions.append(new Option("24 months", "24"));
+            // Add more options for Gold Loan...
+        }
+    }
+
+    // Call the function on page load if there's a selected loan type
+    customizeLoanTenureOptions();
+</script>
