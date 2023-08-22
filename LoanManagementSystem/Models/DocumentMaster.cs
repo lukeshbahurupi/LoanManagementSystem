@@ -7,6 +7,6 @@ namespace LoanManagementSystem.Models
         [Key]
         public string DocumentCode { get; set; }
         public string DocumentName { get; set; }
-
+        public ICollection<LoanDocumentMapping> LoanDocumentMappings { get; set; }
     }
 }

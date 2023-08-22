@@ -15,6 +15,7 @@ namespace LoanManagementSystem.Data
         public DbSet<CustomerLoanHistory> CustomerLoanHistories { get; set; }
         public DbSet<LoanDocumentMapping> DocumentMappings { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LoanType>().HasData(
@@ -29,6 +30,20 @@ namespace LoanManagementSystem.Data
                 new DocumentMaster { DocumentCode = "D04", DocumentName = "School Certificate" },
                 new DocumentMaster { DocumentCode = "D05", DocumentName = "Driving Lic Photo" }
                 );
+            modelBuilder.Entity<LoanDocumentMapping>()
+                .HasKey(mapping => mapping.Id);
+
+            // Configure relationships
+            modelBuilder.Entity<LoanDocumentMapping>()
+                .HasOne(mapping => mapping.LoanType)
+                .WithMany(loanType => loanType.LoanDocumentMappings)
+                .HasForeignKey(mapping => mapping.LoanCode);
+
+            modelBuilder.Entity<LoanDocumentMapping>()
+                .HasOne(mapping => mapping.DocumentMaster)
+                .WithMany(document => document.LoanDocumentMappings)
+                .HasForeignKey(mapping => mapping.DocumentCode);
+
             modelBuilder.Entity<LoanDocumentMapping>().HasData(
                 new LoanDocumentMapping { Id = 1, DocumentCode = "D01", LoanCode = "L01" },
                 new LoanDocumentMapping { Id = 2, DocumentCode = "D02", LoanCode = "L01" },
@@ -39,7 +54,7 @@ namespace LoanManagementSystem.Data
                 new LoanDocumentMapping { Id = 7, DocumentCode = "D02", LoanCode = "L02" },
                 new LoanDocumentMapping { Id = 8, DocumentCode = "D03", LoanCode = "L02" },
                 new LoanDocumentMapping { Id = 9, DocumentCode = "D01", LoanCode = "L03" },
-                new LoanDocumentMapping { Id = 10,DocumentCode = "D02", LoanCode = "L03" }
+                new LoanDocumentMapping { Id = 10, DocumentCode = "D02", LoanCode = "L03" }
                 );
         }
     }

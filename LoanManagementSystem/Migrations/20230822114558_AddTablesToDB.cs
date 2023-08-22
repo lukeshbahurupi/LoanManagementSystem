@@ -30,20 +30,6 @@ namespace LoanManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DocumentMappings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LoanCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocumentCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DocumentMappings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DocumentMasters",
                 columns: table => new
                 {
@@ -94,6 +80,44 @@ namespace LoanManagementSystem.Migrations
                 {
                     table.PrimaryKey("PK_LoanTypes", x => x.LoanCode);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "DocumentMappings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LoanCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocumentCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoanTypeLoanCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DocumentMasterDocumentCode = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentMappings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DocumentMappings_DocumentMasters_DocumentMasterDocumentCode",
+                        column: x => x.DocumentMasterDocumentCode,
+                        principalTable: "DocumentMasters",
+                        principalColumn: "DocumentCode",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DocumentMappings_LoanTypes_LoanTypeLoanCode",
+                        column: x => x.LoanTypeLoanCode,
+                        principalTable: "LoanTypes",
+                        principalColumn: "LoanCode",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentMappings_DocumentMasterDocumentCode",
+                table: "DocumentMappings",
+                column: "DocumentMasterDocumentCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentMappings_LoanTypeLoanCode",
+                table: "DocumentMappings",
+                column: "LoanTypeLoanCode");
         }
 
         /// <inheritdoc />
@@ -106,10 +130,10 @@ namespace LoanManagementSystem.Migrations
                 name: "DocumentMappings");
 
             migrationBuilder.DropTable(
-                name: "DocumentMasters");
+                name: "LoanApplications");
 
             migrationBuilder.DropTable(
-                name: "LoanApplications");
+                name: "DocumentMasters");
 
             migrationBuilder.DropTable(
                 name: "LoanTypes");

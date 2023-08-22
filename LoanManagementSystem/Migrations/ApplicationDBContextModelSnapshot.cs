@@ -158,13 +158,17 @@ namespace LoanManagementSystem.Migrations
 
                     b.Property<string>("DocumentCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoanCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentCode");
+
+                    b.HasIndex("LoanCode");
 
                     b.ToTable("DocumentMappings");
 
@@ -290,6 +294,35 @@ namespace LoanManagementSystem.Migrations
                             MinimumAgeRequired = 18,
                             MinimumLoanAmount = 150000m
                         });
+                });
+
+            modelBuilder.Entity("LoanManagementSystem.Models.LoanDocumentMapping", b =>
+                {
+                    b.HasOne("LoanManagementSystem.Models.DocumentMaster", "DocumentMaster")
+                        .WithMany("LoanDocumentMappings")
+                        .HasForeignKey("DocumentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LoanManagementSystem.Models.LoanType", "LoanType")
+                        .WithMany("LoanDocumentMappings")
+                        .HasForeignKey("LoanCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMaster");
+
+                    b.Navigation("LoanType");
+                });
+
+            modelBuilder.Entity("LoanManagementSystem.Models.DocumentMaster", b =>
+                {
+                    b.Navigation("LoanDocumentMappings");
+                });
+
+            modelBuilder.Entity("LoanManagementSystem.Models.LoanType", b =>
+                {
+                    b.Navigation("LoanDocumentMappings");
                 });
 #pragma warning restore 612, 618
         }

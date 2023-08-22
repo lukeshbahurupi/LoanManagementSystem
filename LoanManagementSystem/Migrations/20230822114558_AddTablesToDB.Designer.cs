@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20230821181518_AddTablesToDB")]
+    [Migration("20230822114558_AddTablesToDB")]
     partial class AddTablesToDB
     {
         /// <inheritdoc />
@@ -136,11 +136,23 @@ namespace LoanManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DocumentMasterDocumentCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("LoanCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LoanTypeLoanCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentMasterDocumentCode");
+
+                    b.HasIndex("LoanTypeLoanCode");
 
                     b.ToTable("DocumentMappings");
                 });
@@ -172,6 +184,35 @@ namespace LoanManagementSystem.Migrations
                     b.HasKey("LoanCode");
 
                     b.ToTable("LoanTypes");
+                });
+
+            modelBuilder.Entity("LoanManagementSystem.Models.LoanDocumentMapping", b =>
+                {
+                    b.HasOne("LoanManagementSystem.Models.DocumentMaster", "DocumentMaster")
+                        .WithMany("LoanDocumentMappings")
+                        .HasForeignKey("DocumentMasterDocumentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LoanManagementSystem.Models.LoanType", "LoanType")
+                        .WithMany("LoanDocumentMappings")
+                        .HasForeignKey("LoanTypeLoanCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentMaster");
+
+                    b.Navigation("LoanType");
+                });
+
+            modelBuilder.Entity("LoanManagementSystem.Models.DocumentMaster", b =>
+                {
+                    b.Navigation("LoanDocumentMappings");
+                });
+
+            modelBuilder.Entity("LoanManagementSystem.Models.LoanType", b =>
+                {
+                    b.Navigation("LoanDocumentMappings");
                 });
 #pragma warning restore 612, 618
         }
