@@ -63,6 +63,7 @@
        </form>
 </div>
 <script>
+    //for age Calculation
     $(document).ready(function () {
         $("#BirthDate").change(function () {
             calculateAge();
@@ -93,19 +94,18 @@
         const loanTenureOptions = $("#LoanTenure");
 
         loanTenureOptions.empty(); // Clear existing options
-
+         // Add options for Loan...
         if (selectedLoanType === "Veical Laon") {
             loanTenureOptions.append(new Option("6 months", "6"));
             loanTenureOptions.append(new Option("12 months", "12"));
             loanTenureOptions.append(new Option("24 months", "24"));
         } else if (selectedLoanType === "Personal Loan") {
             loanTenureOptions.append(new Option("12 months", "12"));
-            loanTenureOptions.append(new Option("24 months", "24"));
-            // Add more options for Personal Loan...
+            loanTenureOptions.append(new Option("24 months", "24"));           
+            loanTenureOptions.append(new Option("36 months", "36"));           
         } else if (selectedLoanType === "Gold Loan") {
             loanTenureOptions.append(new Option("18 months", "18"));
-            loanTenureOptions.append(new Option("24 months", "24"));
-            // Add more options for Gold Loan...
+            loanTenureOptions.append(new Option("24 months", "24"));            
         }
     }
 
