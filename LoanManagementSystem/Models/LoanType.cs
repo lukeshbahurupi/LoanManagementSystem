@@ -19,6 +19,6 @@ namespace LoanManagementSystem.Models
         public int MinimumAgeRequired { get; set; }
         public int MaximumAgeRequired { get; set;}
         public ICollection<LoanDocumentMapping> LoanDocumentMappings { get; set; }
-
+        
     }
 }

@@ -1,68 +1,121 @@
 ﻿@model LoanApplication
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
  @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
-<h1>Application form</h1>
 
 
-<div>
-    <form method="post">
-       <div>
+
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h1>Application form</h1>
+            <hr />
+        </div>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(state => state.Errors))
+        {
+            <div class="text-danger">@error.ErrorMessage</div>
+        }
+        <div class="mb-3 row p-1">
             <lable>Application Date</lable>
-            <input for="ApplicationDate" />
+            <input asp-for="ApplicationDate" type="text" id="ApplicationDate" readonly />
         </div>
-       <div>
+       <div class="mb-3 row p-1">
             <lable>Customer Name</lable>
-            <input for="CustemerName" />
+            <input asp-for="CustemerName" type="text"/>
+            <span asp-validation-for="CustemerName" class="text-danger"></span>
         </div>
-       <div>
+       <div class="mb-3 row p-1">
             <lable>Gender</lable>
-            <select>
+            <select asp-for="Gender">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
             </select>
        </div>
-       <div>
+       <div class="mb-3 row p-1">
             <lable>Birth Date</lable>
-            <input for="BirthDate" type="date" id="BirthDate" />
+            <input asp-for="BirthDate" type="date" id="BirthDate" /> 
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
-       <div>
+       <div class="mb-3 row p-1">
             <lable>Age</lable>
-            <input for="CustemerName" id="Age"/>
+            <input asp-for="Age" id="Age" readonly/>
+            <span asp-validation-for="Age" class="text-danger"></span>
         </div>
-       <div>
+        <div class="mb-3 row p-1">
+            <label>Email Id</label>
+            <input asp-for="EmailId" />
+            <span asp-validation-for="EmailId" class="text-danger"></span>
+        </div>
+       @* <div class="mb-3 row p-1">
             <lable>Phone Number</lable>
-            <input for="PhoneNumber" />
+            <input asp-for="PhoneNumber" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div> *@
+        <div class="mb-3 row p-1">
+            <label>Phone Number</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <select id="CountryCode" class="input-group-text">
+                          <option value="+91">select</option>
+                        <option value="+91">+91 (India)</option>
+                        <option value="+61">+61 (Australia)</option>
+                        <option value="+1">+1 (USA)</option>
+                    </select>
+                </div>
+                <input asp-for="PhoneNumber" class="form-control" />
+            </div>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
-        <div>
+        <div class="mb-3 row p-1">
             <label>Loan Type</label>
-            <select id="LoanType" name="LoanType">
-                <option value="Veical Laon">Veical Laon</option>
+            <select id="LoanType" name="LoanType" asp-for="LoanType">
+                <option value="null">select Loan</option>
+                <option value="Vehical Loan">Vehical Loan</option>
                 <option value="Personal Loan">Personal Loan</option>
                 <option value="Gold Loan">Gold Loan</option>
             </select>
         </div>
-        <div>
+       <div class="mb-3 row p-1">
+            <lable>Required Loan Amount</lable>
+            <input asp-for="RequiredLoanAmount" name="RequiredLoanAmount" id="RequiredLoanAmount" type="number" min="0" step="0.01"/>
+            <span asp-validation-for="RequiredLoanAmount" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
             <label>Loan Tenure In Month</label>
-            <select id="LoanTenure" name="LoanTenure">
+            <select asp-for="LoanTenureInMonth" id="LoanTenureInMonth" name="LoanTenureInMonth">
                 <!-- Options will be dynamically added here -->
             </select>
         </div>
-       <div>
-            <lable>Required Loan Amount</lable>
-            <input for="RequiredLoanAmount" />
-        </div>
-       <div>
+       <div class="mb-3 row p-1">
             <lable>Rate Of Interest</lable>
-            <input for="RateOfInterest" />
+            <input type="text" id="RateOfInterest" name="RateOfInterest" readonly />
         </div>       
-       <div>
+       <div class="mb-3 row p-1">
             <lable>Loan EMI</lable>
-            <input for="" />
+            <input type="text" id="LoanEMI" name="LoanEMI" readonly asp-for="LoanEMI"/>
         </div>
-       </form>
+      
+
+        <div>
+            <input type="submit" class="text-capitalize" />
+        </div>
+       
+        
+
 </div>
+       </form>
+
 <script>
+    //Current date
+    $(document).ready(function () {
+        // Get the current date in yyyy-mm-dd format
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        // Set the value of the input field to the current date
+        $('#ApplicationDate').val(currentDate);
+    });
+
     //for age Calculation
     $(document).ready(function () {
         $("#BirthDate").change(function () {
@@ -84,21 +137,30 @@
             $("#Age").val(age);
         }
     }
+
+    //phone number
+    $("#CountryCode").change(function () {
+        const selectedCountryCode = $(this).val();
+        $("#PhoneNumber").val(selectedCountryCode); // Set the phone number input value
+    });
+
     //for Tenure 
     $("#LoanType").change(function () {
         customizeLoanTenureOptions();
     });
-
+    
+    
     function customizeLoanTenureOptions() {
         const selectedLoanType = $("#LoanType").val();
-        const loanTenureOptions = $("#LoanTenure");
+        const loanTenureOptions = $("#LoanTenureInMonth");
 
-        loanTenureOptions.empty(); // Clear existing options
+        loanTenureOptions.empty();/*  Clear existing options */
          // Add options for Loan...
-        if (selectedLoanType === "Veical Laon") {
+        if (selectedLoanType === "Vehical Loan") {
             loanTenureOptions.append(new Option("6 months", "6"));
             loanTenureOptions.append(new Option("12 months", "12"));
             loanTenureOptions.append(new Option("24 months", "24"));
+
         } else if (selectedLoanType === "Personal Loan") {
             loanTenureOptions.append(new Option("12 months", "12"));
             loanTenureOptions.append(new Option("24 months", "24"));           
@@ -111,4 +173,70 @@
 
     // Call the function on page load if there's a selected loan type
     customizeLoanTenureOptions();
+
+    //update Rate Of Interest
+    $(document).ready(function () {
+        $("#LoanType").change(function () {
+            updateRateOfInterest();
+        });
+
+        updateRateOfInterest(); // Set initial rate based on selected loan type
+
+        function updateRateOfInterest() {
+            const selectedLoanType = $("#LoanType").val();
+            let rate = "";
+
+            if (selectedLoanType === "Vehical Loan") {
+                rate = "8.5";
+            } else if (selectedLoanType === "Personal Loan") {
+                rate = "12";
+            } else if (selectedLoanType === "Gold Loan") {
+                rate = "14";
+            }
+
+            $("#RateOfInterest").val(rate);
+        }
+    });
+
+   //Emi Calculation
+    $(document).ready(function () {
+        $("#LoanType").change(function () {
+            updateRateAndEMI();
+        });
+
+        $("#RequiredLoanAmount, #RateOfInterest, #LoanTenureInMonth").on("input", function () {
+            updateEMI();
+        });
+
+        updateRateAndEMI(); /* Set initial rate and EMI */
+
+        function updateRateAndEMI() {
+            updateRateOfInterest();
+            updateEMI();
+        }
+
+
+        function updateEMI() {
+            const loanAmount = parseFloat($("#RequiredLoanAmount").val());
+            const rateOfInterest = parseFloat($("#RateOfInterest").val()) / 100 / 12;/*  Monthly rate */
+            const loanTenureMonths = parseFloat($("#LoanTenureInMonth").val());
+
+            const emi = calculateEMI(loanAmount, rateOfInterest, loanTenureMonths);
+
+            // $("#LoanEMI").val(emi.toFixed(2));
+            if (!isNaN(loanAmount) && !isNaN(rateOfInterest) && !isNaN(loanTenureMonths)) {
+                const emi = calculateEMI(loanAmount, rateOfInterest, loanTenureMonths);
+                $("#LoanEMI").val(emi.toFixed(2));
+            } else {
+                $("#LoanEMI").val(""); // Clear the EMI field if any values are invalid
+            }
+        }
+
+        function calculateEMI(loanAmount, rateOfInterest, loanTenureMonths) {
+            const emi = (loanAmount * rateOfInterest * Math.pow(1 + rateOfInterest, loanTenureMonths)) /
+                (Math.pow(1 + rateOfInterest, loanTenureMonths) - 1);
+
+            return emi;
+        }
+    });
 </script>
