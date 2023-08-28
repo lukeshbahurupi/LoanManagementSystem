@@ -1,4 +1,6 @@
 ﻿using LoanManagementSystem.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoanManagementSystem.Data
@@ -12,9 +14,10 @@ namespace LoanManagementSystem.Data
         public DbSet<LoanType> LoanTypes { get; set; }
         public DbSet<LoanApplication> LoanApplications { get; set; }
         public DbSet<DocumentMaster> DocumentMasters { get; set; }
-        public DbSet<CustomerLoanHistory> CustomerLoanHistories { get; set; }
+        
         public DbSet<LoanDocumentMapping> DocumentMappings { get; set; }
-
+        public DbSet<LoanDocument> loanDocuments { get; set; }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +59,8 @@ namespace LoanManagementSystem.Data
                 new LoanDocumentMapping { Id = 9, DocumentCode = "D01", LoanCode = "L03" },
                 new LoanDocumentMapping { Id = 10, DocumentCode = "D02", LoanCode = "L03" }
                 );
+                
         }
     }
+    
 }

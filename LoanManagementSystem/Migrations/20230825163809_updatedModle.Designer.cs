@@ -4,6 +4,7 @@ using LoanManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230825163809_updatedModle")]
+    partial class updatedModle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,41 @@ namespace LoanManagementSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("LoanManagementSystem.Models.CustomerLoanHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LoanDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("LoanRequiredAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LoanSactionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("LoanType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("loanStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerLoanHistories");
+                });
 
             modelBuilder.Entity("LoanManagementSystem.Models.DocumentMaster", b =>
                 {
@@ -65,17 +103,24 @@ namespace LoanManagementSystem.Migrations
 
             modelBuilder.Entity("LoanManagementSystem.Models.LoanApplication", b =>
                 {
-                    b.Property<int>("ApplicationNumber")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationNumber"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("ApplicationNumber")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Attachment")
+                        .IsRequired()
+                        .HasColumnType("varbinary(MAX)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
@@ -85,9 +130,17 @@ namespace LoanManagementSystem.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("EmailId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -113,7 +166,7 @@ namespace LoanManagementSystem.Migrations
                     b.Property<decimal>("RequiredLoanAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ApplicationNumber");
+                    b.HasKey("Id");
 
                     b.ToTable("LoanApplications");
                 });

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿ @* @using Microsoft.AspNetCore.Http *@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,6 +11,15 @@
 </head>
 <body>
     <header>
+         @* @{
+
+             var userId = Context.Session.GetString("userId");
+             if (userId == null)
+             {
+                 // Context.Response.Redirect("/Account");
+
+             }
+         } *@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LoanManagementSystem</a>
@@ -20,30 +30,34 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
+                          
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                         <li class="nav-item">
+                         
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="StaticData" asp-action="Index">Loan Type</a>
                         </li>
-                         <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="StaticData" asp-action="DocumentMaster">Document List</a>
                         </li>
-                         <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="StaticData" asp-action="LoanDocumentMapping">Document Link Mapping</a>
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="ApplicationForm">Application Form</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="UploadDocument">Upload Documents</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="Index">Customer History</a>
-                        </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="ApplicationForm">Application Form</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="Index">Customer History</a>
+                            </li>
+                       
+                        
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+
                 </div>
             </div>
         </nav>

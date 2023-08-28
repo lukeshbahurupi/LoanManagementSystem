@@ -1,14 +1,17 @@
-﻿namespace LoanManagementSystem.Models
+﻿using System.Collections;
+
+namespace LoanManagementSystem.Models
 {
     public class LoanDocument
     {
         public int Id { get; set; }
         public string FileName { get; set; }
         public string FilePath { get; set; }
-        public int LoanApplicationId { get; set; } // Foreign key to LoanApplication
-
-        // Navigation property to the associated LoanApplication
+        public string ContentType { get; set; }
+        public byte[] Content { get; set; }
+        public int LoanApplicationId { get; set; } 
         public LoanApplication LoanApplication { get; set; }
+
 
     }
 }

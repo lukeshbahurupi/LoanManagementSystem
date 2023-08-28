@@ -6,8 +6,7 @@ namespace LoanManagementSystem.Models
 {
     public class LoanApplication
     {
-        [Key]
-        public int ApplicationNumber { get; set; }
+         [Key]public int ApplicationNumber { get; set; }
         public DateTime ApplicationDate { get; set; }
         [MaxLength(30)]
         public string CustemerName { get; set; }
@@ -31,6 +30,7 @@ namespace LoanManagementSystem.Models
         public int LoanTenureInMonth { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public double LoanEMI { get; set;}
+       
     }
 }
 public class CustomPhoneNumberValidationAttribute : ValidationAttribute

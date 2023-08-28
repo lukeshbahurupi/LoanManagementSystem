@@ -4,6 +4,7 @@ using LoanManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230825082423_uploadfilePropUpdate")]
+    partial class uploadfilePropUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,41 @@ namespace LoanManagementSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("LoanManagementSystem.Models.CustomerLoanHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LoanDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("LoanRequiredAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("LoanSactionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("LoanType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("loanStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerLoanHistories");
+                });
 
             modelBuilder.Entity("LoanManagementSystem.Models.DocumentMaster", b =>
                 {
@@ -116,40 +154,6 @@ namespace LoanManagementSystem.Migrations
                     b.HasKey("ApplicationNumber");
 
                     b.ToTable("LoanApplications");
-                });
-
-            modelBuilder.Entity("LoanManagementSystem.Models.LoanDocument", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte[]>("Content")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LoanApplicationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoanApplicationId");
-
-                    b.ToTable("loanDocuments");
                 });
 
             modelBuilder.Entity("LoanManagementSystem.Models.LoanDocumentMapping", b =>
@@ -298,17 +302,6 @@ namespace LoanManagementSystem.Migrations
                             MinimumAgeRequired = 18,
                             MinimumLoanAmount = 150000m
                         });
-                });
-
-            modelBuilder.Entity("LoanManagementSystem.Models.LoanDocument", b =>
-                {
-                    b.HasOne("LoanManagementSystem.Models.LoanApplication", "LoanApplication")
-                        .WithMany()
-                        .HasForeignKey("LoanApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LoanApplication");
                 });
 
             modelBuilder.Entity("LoanManagementSystem.Models.LoanDocumentMapping", b =>

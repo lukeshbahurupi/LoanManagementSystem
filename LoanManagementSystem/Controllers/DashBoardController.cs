@@ -1,7 +1,10 @@
 ﻿using LoanManagementSystem.Data;
 using LoanManagementSystem.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
 
 namespace LoanManagementSystem.Controllers
 {
@@ -14,14 +17,19 @@ namespace LoanManagementSystem.Controllers
         {
             _dbContext = db;
         }
+        public IActionResult LoanDocument()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
-            return View();
+            return View(_dbContext.LoanApplications.ToList());
         }
         public IActionResult ApplicationForm()
-        {
+        {            
             return View();
         }
+
         [HttpPost]
         public IActionResult ApplicationForm(LoanApplication obj)
         {
@@ -37,38 +45,25 @@ namespace LoanManagementSystem.Controllers
                             ModelState.AddModelError("Age", "Invalid age based on loan type.");
                             return View(obj);
                         }
-                        
+
                     }
 
                 }
-
-            }
-            if (ModelState.IsValid)
-            {
-                _dbContext.LoanApplications.Add(obj);
-                _dbContext.SaveChanges();
-            }
-
-
+                
                 #endregion
-
-                #region non-negative validation
-                /* if (ModelState.IsValid)
-                 {
-                     if (obj.RequiredLoanAmount < 0)
-                     {
-                         ModelState.AddModelError("RequiredLoanAmount", "Loan amount must be non-negative.");
-                     }
-
-                 }
-
-                 if (!ModelState.IsValid)
-                 {
-                     return View(obj);
-                 }*/
-                #endregion
+            }
+                if (ModelState.IsValid)
+                {
+                    _dbContext.LoanApplications.Add(obj);
+                    _dbContext.SaveChanges();
+                }            
 
                 return View();
+        }
+
+         public IActionResult CustemerResultHistory()
+        {
+            return View(_dbContext.LoanApplications.ToList());
         }
     }
 }

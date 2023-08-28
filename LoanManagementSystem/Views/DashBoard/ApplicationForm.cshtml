@@ -1,4 +1,6 @@
 ﻿@model LoanApplication
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
  @* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
 
@@ -6,15 +8,19 @@
 
 
 <form method="post">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
+    <div class="border p-4 m-5 col-md-6">
+        <div class="row pb-2 text-center">
             <h1>Application form</h1>
+            
             <hr />
         </div>
-        @foreach (var error in ViewData.ModelState.Values.SelectMany(state => state.Errors))
+
+        @* @foreach (var error in ViewData.ModelState.Values.SelectMany(state => state.Errors))
         {
             <div class="text-danger">@error.ErrorMessage</div>
-        }
+        } *@
+
+         @* <div asp-validation-summary="All" class="text-danger"></div> *@
         <div class="mb-3 row p-1">
             <lable>Application Date</lable>
             <input asp-for="ApplicationDate" type="text" id="ApplicationDate" readonly />
@@ -57,7 +63,7 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <select id="CountryCode" class="input-group-text">
-                          <option value="+91">select</option>
+                        <option value="+91">Select Country</option>
                         <option value="+91">+91 (India)</option>
                         <option value="+61">+61 (Australia)</option>
                         <option value="+1">+1 (USA)</option>
@@ -95,9 +101,46 @@
             <lable>Loan EMI</lable>
             <input type="text" id="LoanEMI" name="LoanEMI" readonly asp-for="LoanEMI"/>
         </div>
-      
+        @* <div class="mb-3 row p-1">
+            <lable>File Name</lable>
+            <input type="text" id="FileName" name="FileName" readonly asp-for="FileName" />
+        </div>
+         <div class="mb-3 row p-1">
+            <label>Uploaded Documents</label>
+             <input asp-for="Attachment" type="file" multiple class="form-control-file" />
+            <span asp-validation-for="Attachment" class="text-danger"></span>
+        </div> *@
+        @* <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>File Name</th>                    
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
 
-        <div>
+                    @foreach (var row in Model.att)
+                    {
+                        <tr>
+                            <td> @row.</td>
+                            <td> @row.</td>
+                            
+                            <td><a class="btn btn-primary" asp-controller="Home" asp-action="GetAttachment" asp-route-ID="@row.Id">View</a></td>
+                            <td><a class="btn btn-primary" asp-controller="Home" asp-action="GetFileStreamResultDemo" asp-route-filename="@row.FileName">Download</a></td>
+                            <td><a class="btn btn-primary" href="@Url.Action("DeleteAttachment", new { ID = row.Id })">Delete</a></td>
+                        </tr>
+                    }
+
+                }
+
+            </tbody> *@
+
+
+            <div>
             <input type="submit" class="text-capitalize" />
         </div>
        
@@ -105,8 +148,17 @@
 
 </div>
        </form>
+       @section scripts{
+           @{
+            <partial name="_ValidationScriptsPartial"/>
+           }
+       }
 
 <script>
+
+
+
+
     //Current date
     $(document).ready(function () {
         // Get the current date in yyyy-mm-dd format
@@ -144,11 +196,26 @@
         $("#PhoneNumber").val(selectedCountryCode); // Set the phone number input value
     });
 
+   
+
+       
+
+   
+   
     //for Tenure 
     $("#LoanType").change(function () {
         customizeLoanTenureOptions();
+        // custemizeDocumentList();
     });
     
+    // function cuscustemizeDocumentList() {
+    //     const selectedLoanType = $("#LoanType").val();
+    //     const list = $("#DocumentList");
+
+    //     var documentMappings = @Html.Raw(ViewData["DocumentMappings"]);
+
+    //     documentMappings.
+    // }
     
     function customizeLoanTenureOptions() {
         const selectedLoanType = $("#LoanType").val();
@@ -157,15 +224,18 @@
         loanTenureOptions.empty();/*  Clear existing options */
          // Add options for Loan...
         if (selectedLoanType === "Vehical Loan") {
+            loanTenureOptions.append(new Option("select", "6"));
             loanTenureOptions.append(new Option("6 months", "6"));
             loanTenureOptions.append(new Option("12 months", "12"));
             loanTenureOptions.append(new Option("24 months", "24"));
 
         } else if (selectedLoanType === "Personal Loan") {
+            loanTenureOptions.append(new Option("select", "12"));
             loanTenureOptions.append(new Option("12 months", "12"));
             loanTenureOptions.append(new Option("24 months", "24"));           
             loanTenureOptions.append(new Option("36 months", "36"));           
         } else if (selectedLoanType === "Gold Loan") {
+            loanTenureOptions.append(new Option("select", "18"));
             loanTenureOptions.append(new Option("18 months", "18"));
             loanTenureOptions.append(new Option("24 months", "24"));            
         }
